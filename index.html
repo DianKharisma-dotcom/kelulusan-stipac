@@ -1017,7 +1017,7 @@
           <h3>🏫 Identitas Sekolah</h3>
           <div class="form-group">
             <label>Nama Sekolah</label>
-            <input type="text" class="form-input" id="s-nama-sekolah" value="SD Negeri 1 EduDigital">
+            <input type="text" class="form-input" id="s-nama-sekolah" value="SD NEGERI 3 PACUNG">
           </div>
           <div class="form-group">
             <label>Alamat Lengkap</label>
@@ -1186,12 +1186,12 @@
 // ============================================================
 const CONFIG = {
   adminPassword: 'admin123',
-  schoolName: 'SD Negeri 1 EduDigital',
-  schoolAddr: 'Jl. Merdeka No. 123, Jakarta',
-  logoUrl: 'https://png.pngtree.com/png-clipart/20211024/original/pngtree-logo-school-png-image_6867819.png',
-  twibbonUrl: 'https://i.postimg.cc/cLc0JZrH/SMP-EDUDIGIATL-(3).png',
-  sheetId: '',
-  sheetName: 'Sheet1',
+  schoolName: 'SD NEGERI 3 PACUNG',
+  schoolAddr: 'Banjar Dinas Alassari, Desa Pacung, Kec. Tejakula, Kab. Buleleng-Bali.',
+  logoUrl: 'https://res.cloudinary.com/dc91zda06/image/upload/v1778584750/logo_sekolah_512-pxl_sdltqg.png',
+  twibbonUrl: 'https://res.cloudinary.com/dc91zda06/image/upload/v1779838102/Twibbon_Lulus1_lfmw3f.png',
+  sheetId: '16di4O2vfCS4J9lrgI3I7bYKANB3NenNvw0zfUlTdxMo',
+  sheetName: 'KELULUSAN',
 };
 
 // ============================================================
@@ -1209,14 +1209,14 @@ let dataSiswa = [
 function loadData() {
   const saved = localStorage.getItem('dataSiswa');
   if (saved) dataSiswa = JSON.parse(saved);
-  const cfg = localStorage.getItem('appConfig');
-  if (cfg) Object.assign(CONFIG, JSON.parse(cfg));
+  // Tidak pakai localStorage untuk config — pakai default hardcoded
+  // agar pengaturan konsisten di semua perangkat
   applyConfig();
 }
 
 function saveData() {
   localStorage.setItem('dataSiswa', JSON.stringify(dataSiswa));
-  localStorage.setItem('appConfig', JSON.stringify(CONFIG));
+  // Config tidak disimpan ke localStorage agar tetap konsisten di semua perangkat
 }
 
 function applyConfig() {
