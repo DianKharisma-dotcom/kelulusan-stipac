@@ -1258,13 +1258,37 @@ function loginAdmin() {
 }
 
 // ============================================================
-// CEK KELULUSAN
+// CEK KELULUSAN — fetch langsung dari Google Sheets
 // ============================================================
-function cekKelulusan() {
+async function cekKelulusan() {
   const nisn = document.getElementById('nisn-input').value.trim();
   const errEl = document.getElementById('error-msg');
 
   if (!nisn) { errEl.textContent = '⚠️ Masukkan NISN terlebih dahulu.'; errEl.style.display = 'block'; return; }
+
+  errEl.style.display = 'none';
+  document.getElementById('loading').classList.add('show');
+
+  try {
+    // Ambil data langsung dari Google Sheets agar selalu sinkron di semua perangkat
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxab5_1U97wnwaNbozncloBHXAx9A8ctJqvkYwvHBOP_-c6YFITGwDja0l1v9xzcl1Edw/exec';
+    const url = `${APPS_SCRIPT_URL}?sheetId=${encodeURIComponent(CONFIG.sheetId)}&sheet=${encodeURIComponent(CONFIG.sheetName)}`;
+
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const freshData = await res.json();
+
+    if (Array.isArray(freshData)) {
+      // Update dataSiswa dengan data terbaru dari Sheets
+      dataSiswa = freshData;
+      saveData();
+    }
+  } catch (e) {
+    // Jika gagal fetch Sheets, fallback ke data localStorage yang ada
+    console.warn('Gagal fetch dari Sheets, pakai data lokal:', e);
+  } finally {
+    document.getElementById('loading').classList.remove('show');
+  }
 
   const siswa = dataSiswa.find(s => s.nisn === nisn);
 
@@ -1273,8 +1297,6 @@ function cekKelulusan() {
     errEl.style.display = 'block';
     return;
   }
-
-  errEl.style.display = 'none';
 
   if (siswa.status === 'Lulus') {
     showResultLulus(siswa);
